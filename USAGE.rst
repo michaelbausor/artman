@@ -267,15 +267,15 @@ pipeline_kwargs argument. For example, to run batch generation only for Java:
         GapicClientBatchPipeline
 
 It is also possible to restrict the APIs that will be generated using the
-batch_apis setting. For example, to run the batch command only Java and
-only for the PubSub API:
+batch_apis setting. For example, to run the batch command to generate only
+the PubSub API in all languages:
 
   ::
 
      python execute_pipeline.py \
         --config "../googleapis/gapic/batch/common.yaml" \
         --stage_output \
-        --pipeline_kwargs "{'batch_languages':'java','batch_apis':'pubsub'}" \
+        --pipeline_kwargs "{'batch_apis':'pubsub'}" \
         GapicClientBatchPipeline
 
 

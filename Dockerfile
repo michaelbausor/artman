@@ -43,7 +43,7 @@ RUN mkdir -p /usr/src/protoc/ \
   && ln -s /usr/src/protoc/bin/protoc /usr/local/bin/protoc
 
 # Install GRPC and Protobuf.
-RUN pip3 install --upgrade pip \
+RUN pip3 install --upgrade pip==9.0.3 \
   && pip3 install \
     # Ensure that grpcio matches requirements.txt
     grpcio==1.10.0 \

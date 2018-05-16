@@ -171,7 +171,7 @@ RUN git clone https://github.com/googleapis/googleapis \
   && rm -rf /googleapis/.git/
 RUN git clone -b adwords-generation https://github.com/googleapis/toolkit \
   && cd toolkit/ \
-  && git checkout fbae1e6ae7723bdb5310c501da94c7a006ec87d6 \
+  && git checkout 0024ed8f36fea9932d9e8dad2547ad565bcf54aa \
   && cd .. \
   && rm -rf /toolkit/.git/
 ENV TOOLKIT_HOME /toolkit

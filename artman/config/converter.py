@@ -59,8 +59,9 @@ def convert_to_legacy_config_dict(artifact_config, root_dir, output_dir):
     result = {}
     result['common'] = common
 
-    if artifact_config.type == Artifact.GAPIC_CONFIG:
-        # Early return if the artifact type is GAPIC_CONFIG
+    if artifact_config.type == Artifact.GAPIC_CONFIG\
+        or artifact_config.type == Artifact.DISCOGAPIC_CONFIG:
+        # Early return if the artifact type is GAPIC_CONFIG or DISCOGAPIC_CONFIG
         return result
 
     language = Artifact.Language.Name(
@@ -136,7 +137,7 @@ def _calculate_rel_gapic_output_dir(language, api_name, api_version):
     elif language == 'nodejs':
         return 'js/%s-%s' % (api_name, api_version)
     elif language == 'php':
-        return 'google-php-cloud-%s-%s' % (api_name, api_version)
+        return 'php/google-cloud-%s-%s' % (api_name, api_version)
     elif language == 'python':
         return 'python/%s-%s' % (api_name, api_version)
     elif language == 'ruby':

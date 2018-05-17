@@ -327,22 +327,23 @@ def normalize_flags(flags, user_config):
     artifact_type = artifact_config.type
     pipeline_args['artifact_type'] = Artifact.Type.Name(artifact_type)
     if artifact_type == Artifact.GAPIC_ONLY:
-        # TODO: convert all languages from GAPIC_ONLY to GAPIC and then remove
-        # this "if" statement (make pipeline_name = 'GapicOnlyClientPipeline'
-        # for all languages)
-        if artifact_config.language == Artifact.JAVA:
-            pipeline_name = 'GapicOnlyClientPipeline'
-        else:
-            pipeline_name = 'GapicClientPipeline'
+        pipeline_name = 'GapicOnlyClientPipeline'
         pipeline_args['language'] = language
     elif artifact_type == Artifact.GAPIC:
         pipeline_name = 'GapicClientPipeline'
         pipeline_args['language'] = language
-    elif artifact_type in (Artifact.GRPC, Artifact.GRPC_COMMON):
+    elif artifact_type == Artifact.DISCOGAPIC:
+        pipeline_name = 'DiscoGapicClientPipeline'
+        pipeline_args['language'] = language
+        pipeline_args['discovery_doc'] = artifact_config.discovery_doc
+    elif artifact_type == Artifact.GRPC:
         pipeline_name = 'GrpcClientPipeline'
         pipeline_args['language'] = language
     elif artifact_type == Artifact.GAPIC_CONFIG:
         pipeline_name = 'GapicConfigPipeline'
+    elif artifact_type == Artifact.DISCOGAPIC_CONFIG:
+        pipeline_name = 'DiscoGapicConfigPipeline'
+        pipeline_args['discovery_doc'] = artifact_config.discovery_doc
     elif artifact_type == Artifact.PROTOBUF:
         pipeline_name = 'ProtoClientPipeline'
         pipeline_args['language'] = language
@@ -359,6 +360,7 @@ def normalize_flags(flags, user_config):
             config_sections=config_sections,
             repl_vars={
                 'GOOGLEAPIS': root_dir,
+                'DISCOVERY_ARTIFACT_MANAGER': root_dir,
                 'TOOLKIT': user_config.local.toolkit
             },
             language=language, )
@@ -507,7 +509,8 @@ def _change_owner(flags, pipeline_name, pipeline_kwargs):
     if pipeline_kwargs['gapic_api_yaml']:
         gapic_config_path = pipeline_kwargs['gapic_api_yaml'][0]
         if (os.path.exists(gapic_config_path) and
-                'GapicConfigPipeline' == pipeline_name):
+            ('GapicConfigPipeline' == pipeline_name
+                or 'DiscoGapicConfigPipeline' == pipeline_name)):
             # There is a trick that the gapic config output is generated to
             # input directory, where it is supposed to be in order to be
             # used as an input for other artifact generation. With that
